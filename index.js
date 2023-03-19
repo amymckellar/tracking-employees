@@ -71,3 +71,135 @@ function start() {
       }
     });
 }
+
+// View all employees
+function viewEmployees() {
+  db.query("SELECT * FROM employee", (err, res) => {
+    if (err) throw err;
+    console.table(res);
+    start();
+  });
+}
+
+// View all departments
+function viewDepartments() {
+  db.query("SELECT * FROM department", (err, res) => {
+    if (err) throw err;
+    console.table(res);
+    start();
+  });
+}
+
+// View all roles
+function viewRoles() {
+  db.query("SELECT * FROM role", (err, res) => {
+    if (err) throw err;
+    console.table(res);
+    start();
+  });
+}
+
+// Add employee
+function addEmployee() {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "firstName",
+        message: "What is the employee's first name?",
+      },
+      {
+        type: "input",
+        name: "lastName",
+        message: "What is the employee's last name?",
+      },
+      {
+        type: "input",
+        name: "role",
+        message: "What is the employee's role?",
+      },
+      {
+        type: "input",
+        name: "manager",
+        message: "Who is the employee's manager?",
+      },
+    ])
+    .then((answer) => {
+      db.query(
+        "INSERT INTO employee SET ?",
+        {
+          first_name: answer.firstName,
+          last_name: answer.lastName,
+          role_id: answer.role,
+          manager_id: answer.manager,
+        },
+        (err) => {
+          if (err) throw err;
+          console.log("Employee added!");
+          start();
+        }
+      );
+    });
+}
+
+// Add department
+function addDepartment() {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "department",
+        message: "What is the name of the department?",
+      },
+    ])
+    .then((answer) => {
+      db.query(
+        "INSERT INTO department SET ?",
+        {
+          name: answer.department,
+        },
+        (err) => {
+          if (err) throw err;
+          console.log("Department added!");
+          start();
+        }
+      );
+    });
+}
+
+// Add role
+function addRole() {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "title",
+        message: "What is the title of the role?",
+      },
+      {
+        type: "input",
+        name: "salary",
+        message: "What is the salary of the role?",
+      },
+      {
+        type: "input",
+        name: "department",
+        message: "What is the department of the role?",
+      },
+    ])
+    .then((answer) => {
+      db.query(
+        "INSERT INTO role SET ?",
+        {
+          title: answer.title,
+          salary: answer.salary,
+          department_id: answer.department,
+        },
+        (err) => {
+          if (err) throw err;
+          console.log("Role added!");
+          start();
+        }
+      );
+    });
+}
